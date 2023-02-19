@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btsSelectFilter, btnSee;
     TextView tvFilter;
     DataSource dataSource;
+    TextView tvTitle;
 
     EarthquakeDAO earthquakeDAO;
     CountryConcernedDAO ccDAO;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         tvFilter = findViewById(R.id.tv_filter);
+        tvTitle = findViewById(R.id.tv_title);
+        // De esta manera el tvTitle no se muestra pero si ocupa espacio
+        tvTitle.setVisibility(View.INVISIBLE);
         btsSelectFilter = findViewById(R.id.btn_select);
         btsSelectFilter.setOnClickListener(this);
         btnSee = findViewById(R.id.btn_see);
@@ -53,8 +57,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         earthquakesDB = EarthquakesDB.getDatabase(this);
         earthquakeDAO = earthquakesDB.earthquakeDAO();
         lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAll();
+        configRV(lisEarthQK);
+        rvEvents.setVisibility(View.INVISIBLE);
 
 
+    }
+    private void configRV(ArrayList<Earthquake> lisEarthQK) {
+        llm = new LinearLayoutManager(this);
+        rvEvents.setLayoutManager(llm);
+        adapter = new EventsAdapter(lisEarthQK);
+        rvEvents.setAdapter(adapter);
+        rvEvents.setHasFixedSize(true);
 
     }
 
@@ -87,17 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btn_see:
-                configRV(lisEarthQK);
+                showResults();
                 break;
         }
     }
 
-
-    private void configRV(ArrayList<Earthquake> lisEarthQK) {
-        llm = new LinearLayoutManager(this);
-        rvEvents.setLayoutManager(llm);
-        adapter = new EventsAdapter(lisEarthQK);
-        rvEvents.setAdapter(adapter);
-        rvEvents.setHasFixedSize(true);
+    private void showResults() {
+        tvTitle.setVisibility(View.VISIBLE);
+        rvEvents.setVisibility(View.VISIBLE);
     }
+
+
 }

@@ -5,6 +5,7 @@
     <string name="insert_ok">Terremotos insertados</string>
     <string name="tv_title">Terremotos</string>
     <string name="error_upload">Error en actualizacion de datos</string>
+    <string name="scale">en la escala de Richter</string>
 
 
 </resources>

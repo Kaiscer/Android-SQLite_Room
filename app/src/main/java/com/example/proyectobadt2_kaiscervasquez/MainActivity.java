@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnFiltersListener {
 
     Button btsSelectFilter, btnSee;
     TextView tvFilter;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvTitle = findViewById(R.id.tv_title);
         // De esta manera el tvTitle no se muestra pero si ocupa espacio
         tvTitle.setVisibility(View.INVISIBLE);
-        btsSelectFilter = findViewById(R.id.btn_select);
+        btsSelectFilter = findViewById(R.id.btn_selectFilters);
         btsSelectFilter.setOnClickListener(this);
         btnSee = findViewById(R.id.btn_see);
         btnSee.setOnClickListener(this);
@@ -96,13 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_select:
-
+            case R.id.btn_selectFilters:
+                showDialogFilters();
                 break;
             case R.id.btn_see:
                 showResults();
                 break;
         }
+    }
+
+    private void showDialogFilters() {
+        rvEvents.setVisibility(View.GONE);
+        DialogFilters dialogFilters = new DialogFilters();
+        dialogFilters.show(getSupportFragmentManager(), "DialogFilters");
     }
 
     private void showResults() {
@@ -111,4 +116,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    public void onFiltersSelected(String filter) {
+        tvFilter.setText(filter);
+    }
 }

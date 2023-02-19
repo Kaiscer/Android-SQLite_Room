@@ -6,6 +6,11 @@
     <string name="tv_title">Terremotos</string>
     <string name="error_upload">Error en actualizacion de datos</string>
     <string name="scale">en la escala de Richter</string>
+    <string name="filters">Selecciona un filtro</string>
+    <string name="btn_accept">Aceptar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="errorFilter">Debes seleccionar un filtro</string>
+    <string name="errorFilters">Error en onAttach</string>
 
 
 </resources>

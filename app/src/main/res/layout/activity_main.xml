@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_app"
-    android:padding="@dimen/margin_app_16dp"
+    android:padding="@dimen/margin_16dp"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_app_16dp"
+        android:layout_marginTop="@dimen/margin_16dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/btn_select"
+            android:id="@+id/btn_selectFilters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -44,7 +44,7 @@
         android:id="@+id/tv_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="@dimen/margin_36dp"
         android:text="Filter"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_25sp"
@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="@dimen/margin_36dp"
         android:text="@string/tv_title"
         android:textColor="@color/color_btn"
         android:textSize="30sp"
@@ -70,12 +70,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_height="520dp"
+        android:layout_marginTop="@dimen/margin_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

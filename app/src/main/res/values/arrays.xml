@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Filters">
+        <item></item>
+        <item>Mes</item>
+        <item>Año</item>
+        <item>Pais</item>
+    </string-array>
+</resources>

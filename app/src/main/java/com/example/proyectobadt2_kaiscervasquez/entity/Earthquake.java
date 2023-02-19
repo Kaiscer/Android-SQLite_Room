@@ -1,46 +1,52 @@
 package com.example.proyectobadt2_kaiscervasquez.entity;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "Earthquake",indices = {@Index(value = {"DeviceTime"}, unique = true)})    //Unique index
+@Entity(tableName = "EARTHQUAKE",indices = {@Index(value = {"DeviceName"}, unique = true)})    //Unique index
 public class Earthquake {
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "DateTime")
     private String DateTime;
-
-    @ColumnInfo(name = "DeviceName")
-    private String DeviceName;
 
     @ColumnInfo(name = "Scale")
     private double Scale;
 
-    @ColumnInfo(name = "Coordinates")
-    private double Coordinates;
+    @ColumnInfo(name = "DeviceName")
+    private String DeviceName;
 
     @ColumnInfo(name = "Location")
     private String Location;
 
-    @ColumnInfo(name = "Dead")
-     private int Dead;
+    @ColumnInfo(name = "Coordinates")
+    private String Coordinates;
 
-    public Earthquake(String DateTime, String DeviceName, double Scale, double Coordinates, String Location, int Dead) {
-        this.DateTime = DateTime;
-        this.DeviceName = DeviceName;
-        if (Scale < 0){
+    @ColumnInfo(name = "Dead")
+     private String Dead;
+
+    public Earthquake() {
+
+    }
+
+    public Earthquake(String dateTime, double scale, String deviceName, String location, String coordinates, String dead) {
+        this.DateTime = dateTime;
+        if (scale < 0) {
             this.Scale = 0;
-        } else if (Scale > 10){
+        } else if (scale > 10) {
             this.Scale = 10;
         } else {
-            this.Scale = Scale;
+            this.Scale = scale;
         }
-        this.Coordinates = Coordinates;
-        this.Location = Location;
-        this.Dead = Dead;
+        this.DeviceName = deviceName;
+        this.Location = location;
+        this.Coordinates = coordinates;
+        this.Dead = dead;
     }
 
     public String getDateTime() {
@@ -51,14 +57,6 @@ public class Earthquake {
         DateTime = dateTime;
     }
 
-    public String getDeviceName() {
-        return DeviceName;
-    }
-
-    public void setDeviceName(String deviceName) {
-        DeviceName = deviceName;
-    }
-
     public double getScale() {
         return Scale;
     }
@@ -67,12 +65,12 @@ public class Earthquake {
         Scale = scale;
     }
 
-    public double getCoordinates() {
-        return Coordinates;
+    public String getDeviceName() {
+        return DeviceName;
     }
 
-    public void setCoordinates(double coordinates) {
-        Coordinates = coordinates;
+    public void setDeviceName(String deviceName) {
+        DeviceName = deviceName;
     }
 
     public String getLocation() {
@@ -83,11 +81,19 @@ public class Earthquake {
         Location = location;
     }
 
-    public int getDead() {
+    public String getCoordinates() {
+        return Coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        Coordinates = coordinates;
+    }
+
+    public String getDead() {
         return Dead;
     }
 
-    public void setDead(int dead) {
+    public void setDead(String dead) {
         Dead = dead;
     }
 }

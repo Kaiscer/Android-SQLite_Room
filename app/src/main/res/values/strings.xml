@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ProyectoBADT2_KaiscerVasquez</string>
+    <string name="btn_select">Filtros</string>
+    <string name="btn_see">Consultar</string>
+    <string name="insert_ok">Terremotos insertados</string>
+    <string name="tv_title">Terremotos</string>
+    <string name="error_upload">Error en actualizacion de datos</string>
+
+
 </resources>

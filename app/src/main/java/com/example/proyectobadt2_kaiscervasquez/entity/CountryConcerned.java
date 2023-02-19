@@ -1,19 +1,36 @@
 package com.example.proyectobadt2_kaiscervasquez.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "CountryConcerned",
         foreignKeys = @ForeignKey(entity = Earthquake.class,
-                parentColumns = "DateTime", childColumns = "DateTime", onDelete = ForeignKey.CASCADE))
+                parentColumns = "DateTime", childColumns = "DateTime", onDelete = ForeignKey.CASCADE),
+        primaryKeys = {"DateTime", "Country"})
 public class CountryConcerned {
-    @PrimaryKey
-    private String Country;
+
+    @NonNull
     private String DateTime;
 
-    public CountryConcerned(String country, String dateTime) {
-        Country = country;
+    @NonNull
+    private String Country;
+
+    public CountryConcerned(String dateTime, String country) {
+        this.DateTime = dateTime;
+        this.Country = country;
+    }
+
+    public CountryConcerned() {
+    }
+
+    public String getDateTime() {
+
+        return DateTime;
+    }
+
+    public void setDateTime(String dateTime) {
         DateTime = dateTime;
     }
 
@@ -23,13 +40,5 @@ public class CountryConcerned {
 
     public void setCountry(String country) {
         Country = country;
-    }
-
-    public String getDateTime() {
-        return DateTime;
-    }
-
-    public void setDateTime(String dateTime) {
-        DateTime = dateTime;
     }
 }

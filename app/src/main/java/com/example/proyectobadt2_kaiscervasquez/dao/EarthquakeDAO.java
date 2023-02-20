@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface EarthquakeDAO {
 
-    @Query("SELECT * FROM EARTHQUAKE")
+    @Query("SELECT * FROM EARTHQUAKE ORDER BY Scale DESC")
     public List<Earthquake> getAll();
 
     @Insert

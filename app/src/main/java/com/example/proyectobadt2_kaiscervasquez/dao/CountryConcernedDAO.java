@@ -1,8 +1,13 @@
 package com.example.proyectobadt2_kaiscervasquez.dao;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
+
+import com.example.proyectobadt2_kaiscervasquez.entity.CountryConcerned;
 
 @Dao
 public interface CountryConcernedDAO {
-    //TODO: Implementar los métodos de acceso a datos
+
+    @Insert
+    void insert(CountryConcerned countryConcerned);
 }

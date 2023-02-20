@@ -1,5 +1,6 @@
 package com.example.proyectobadt2_kaiscervasquez;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.example.proyectobadt2_kaiscervasquez.dao.CountryConcernedDAO;
 import com.example.proyectobadt2_kaiscervasquez.dao.EarthquakeDAO;
 import com.example.proyectobadt2_kaiscervasquez.dao.db.DataSource;
 import com.example.proyectobadt2_kaiscervasquez.dao.db.EarthquakesDB;
+import com.example.proyectobadt2_kaiscervasquez.entity.CountryConcerned;
 import com.example.proyectobadt2_kaiscervasquez.entity.Earthquake;
 import com.example.proyectobadt2_kaiscervasquez.recycleutil.EventsAdapter;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,12 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvTitle;
 
     EarthquakeDAO earthquakeDAO;
-    CountryConcernedDAO ccDAO;
+    CountryConcernedDAO concernedDAO;
     EarthquakesDB earthquakesDB;
     ArrayList<Earthquake> lisEarthQK;
     RecyclerView rvEvents;
     RecyclerView.LayoutManager llm;
     EventsAdapter adapter;
+    String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSee.setOnClickListener(this);
         earthquakesDB = EarthquakesDB.getDatabase(this);
         earthquakeDAO = earthquakesDB.earthquakeDAO();
-        ccDAO = earthquakesDB.countryConcernedDAO();
+        concernedDAO = earthquakesDB.countryConcernedDAO();
         dataSource = new DataSource();
         checkDataBase(lisEarthQK);
         rvEvents = findViewById(R.id.rv_events);
@@ -72,17 +75,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void checkDataBase(ArrayList<Earthquake> lisEarthQK) {
         lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAll();
+        ArrayList<CountryConcerned> listCcd = new ArrayList<>();
         if (lisEarthQK.isEmpty()){
-            uploadList(lisEarthQK);
+            uploadList(lisEarthQK, listCcd);
         }
     }
 
-    private void uploadList(ArrayList<Earthquake> lisEarthQK) {
+    private void uploadList(ArrayList<Earthquake> lisEarthQK, ArrayList<CountryConcerned> listCcd) {
         lisEarthQK = dataSource.getListEarthQK();
+        listCcd = dataSource.getListCountryCcd();
         for (Earthquake e: lisEarthQK) {
             earthquakeDAO.insert(e);
         }
-        if (lisEarthQK.isEmpty()){
+        for (CountryConcerned c: listCcd) {
+            concernedDAO.insert(c);
+        }
+        if (lisEarthQK.isEmpty() && listCcd.isEmpty()){
             Snackbar.make(findViewById(android.R.id.content),
                     R.string.error_upload, Snackbar.LENGTH_LONG).show();
             return;
@@ -105,19 +113,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDialogFilters() {
-        rvEvents.setVisibility(View.GONE);
+        rvEvents.setVisibility(View.INVISIBLE);
         DialogFilters dialogFilters = new DialogFilters();
         dialogFilters.show(getSupportFragmentManager(), "DialogFilters");
     }
 
     private void showResults() {
+        if (tvFilter.getText().toString().isEmpty())
         tvTitle.setVisibility(View.VISIBLE);
         rvEvents.setVisibility(View.VISIBLE);
     }
 
 
     @Override
-    public void onFiltersSelected(String filter) {
-        tvFilter.setText(filter);
+    public void onFiltersMonth(String filterMonth) {
+
+        tvFilter.setText(filterMonth);
+    }
+
+    @Override
+    public void onFiltersYear(String filterYear) {
+        tvFilter.setText(filterYear);
+    }
+
+    @Override
+    public void onFiltersCountry(String filterCountry) {
+        tvFilter.setText(filterCountry);
+    }
+
+
+    @Override
+    public void onFilterMonthYear(@NonNull String filterMonth, String filterYear) {
+        result = filterMonth.concat(" - ").concat(filterYear);
+        tvFilter.setText(result);
+    }
+
+
+    @Override
+    public void onFilterMonthCountry(@NonNull String filterMonth, String filterCountry) {
+            result = filterMonth.concat(" - ").concat(filterCountry);
+            tvFilter.setText(result);
+    }
+
+
+    @Override
+    public void onFilterYearCountry(@NonNull String filterYear, String filterCountry) {
+
+        result = filterYear.concat(" - ").concat(filterCountry);
+        tvFilter.setText(result);
+
+    }
+
+
+    @Override
+    public void onFilterMonthYearCountry(@NonNull String filterMonth, String filterYear, String filterCountry) {
+        result = filterMonth.concat(" - ").concat(filterYear).concat(" - ").concat(filterCountry);
+        tvFilter.setText(result);
     }
 }

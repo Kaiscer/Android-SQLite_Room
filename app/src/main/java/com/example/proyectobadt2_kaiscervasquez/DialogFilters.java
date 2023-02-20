@@ -17,13 +17,16 @@ public class DialogFilters extends DialogFragment {
 
     OnFiltersListener onListener;
 
-    Spinner spn;
+    Spinner spnMonth,spnYear,spnCountry;
+
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_filters, null);
-        spn = view.findViewById(R.id.spn_filter);
+        spnMonth = view.findViewById(R.id.spn_filterMonth);
+        spnYear = view.findViewById(R.id.spn_filterYear);
+        spnCountry = view.findViewById(R.id.spn_filterCountry);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
 
@@ -36,17 +39,50 @@ public class DialogFilters extends DialogFragment {
 
         dialog.setOnShowListener(dialogInterface ->{
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(btn ->{
-                if (spn.getSelectedItem().toString().equals("")){
-                    Snackbar.make(btn,R.string.errorFilter, Snackbar.LENGTH_LONG).show();
-                }else{
-                    onListener.onFiltersSelected(spn.getSelectedItem().toString());
-                    dialog.dismiss();
-                }
+                selectedFilter(dialog, btn);
             });
         });
 
 
         return dialog;
+    }
+
+    private void selectedFilter(AlertDialog dialog, View btn) {
+        if (spnMonth.getSelectedItemPosition() != 0){
+            onListener.onFiltersMonth(spnMonth.getSelectedItem().toString());
+            dialog.dismiss();
+        }else if (spnYear.getSelectedItemPosition() != 0){
+            onListener.onFiltersYear(spnYear.getSelectedItem().toString());
+            dialog.dismiss();
+        }else if (spnCountry.getSelectedItemPosition() != 0){
+            onListener.onFiltersCountry(spnCountry.getSelectedItem().toString());
+            dialog.dismiss();
+        }else if (spnMonth.getSelectedItemPosition() != 0
+                && spnYear.getSelectedItemPosition() != 0){
+            onListener.onFilterMonthYear(spnMonth.getSelectedItem().toString(),
+                    spnYear.getSelectedItem().toString());
+            dialog.dismiss();
+        } else if (spnMonth.getSelectedItemPosition() != 0
+                && spnCountry.getSelectedItemPosition() != 0) {
+            onListener.onFilterMonthCountry(spnMonth.getSelectedItem().toString(),
+                    spnCountry.getSelectedItem().toString());
+            dialog.dismiss();
+        } else if (spnYear.getSelectedItemPosition() != 0
+                && spnCountry.getSelectedItemPosition() != 0) {
+            onListener.onFilterYearCountry(spnYear.getSelectedItem().toString(),
+                    spnCountry.getSelectedItem().toString());
+            dialog.dismiss();
+        } else if (spnMonth.getSelectedItemPosition() != 0
+                && spnYear.getSelectedItemPosition() != 0
+                && spnCountry.getSelectedItemPosition() != 0 ) {
+            onListener.onFilterMonthYearCountry(spnMonth.getSelectedItem().toString(),
+                    spnYear.getSelectedItem().toString(),
+                    spnCountry.getSelectedItem().toString());
+            dialog.dismiss();
+        }else {
+            Snackbar.make(btn, R.string.errorFilter, Snackbar.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -55,7 +91,7 @@ public class DialogFilters extends DialogFragment {
         if (context instanceof OnFiltersListener){
             onListener = (OnFiltersListener) context;
         }else {
-            throw new RuntimeException(context.toString() + getString(R.string.errorFilters));
+            throw new RuntimeException(context.toString() + getString(R.string.errorOnAttach));
         }
     }
 

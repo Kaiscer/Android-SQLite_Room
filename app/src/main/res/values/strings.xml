@@ -10,7 +10,11 @@
     <string name="btn_accept">Aceptar</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="errorFilter">Debes seleccionar un filtro</string>
-    <string name="errorFilters">Error en onAttach</string>
+    <string name="errorOnAttach">Error en onAttach</string>
+    <string name="month">Mes</string>
+    <string name="year">Año</string>
+    <string name="country">País</string>
+    <string name="titleFilters">Filtros</string>
 
 
 </resources>

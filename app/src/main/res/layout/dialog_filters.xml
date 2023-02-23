@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/color_btn"
                     android:entries="@array/FiltersMonth"
-                    android:minHeight="@dimen/height_30dp" />
+                    android:minHeight="@dimen/height_48dp" />
 
         </LinearLayout>
 
@@ -60,8 +60,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/color_btn"
-                    android:entries="@array/FiltersYear"
-                    android:minHeight="@dimen/height_30dp" />
+                    android:spinnerMode="dropdown"
+                    android:minHeight="@dimen/height_48dp" />
 
         </LinearLayout>
 
@@ -89,8 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/color_btn"
-                    android:entries="@array/FiltersCountry"
-                    android:minHeight="@dimen/height_30dp" />
+                    android:spinnerMode="dropdown"
+                    android:minHeight="@dimen/height_48dp" />
 
         </LinearLayout>
 

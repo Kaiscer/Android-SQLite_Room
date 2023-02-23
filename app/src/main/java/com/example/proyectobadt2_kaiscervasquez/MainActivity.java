@@ -1,5 +1,6 @@
 package com.example.proyectobadt2_kaiscervasquez;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.proyectobadt2_kaiscervasquez.dao.CountryConcernedDAO;
 import com.example.proyectobadt2_kaiscervasquez.dao.EarthquakeDAO;
@@ -35,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView rvEvents;
     RecyclerView.LayoutManager llm;
     EventsAdapter adapter;
-    String result;
+    ArrayList<Earthquake> list = new ArrayList<>();
+    boolean result = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +60,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataSource = new DataSource();
         checkDataBase(lisEarthQK);
         rvEvents = findViewById(R.id.rv_events);
-        earthquakesDB = EarthquakesDB.getDatabase(this);
-        earthquakeDAO = earthquakesDB.earthquakeDAO();
-        lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAll();
+        lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAllEarthquake();
         configRV(lisEarthQK);
         rvEvents.setVisibility(View.INVISIBLE);
+        earthquakesDB = EarthquakesDB.getDatabase(this);
+        earthquakeDAO = earthquakesDB.earthquakeDAO();
+
+
 
 
     }
-    private void configRV(ArrayList<Earthquake> lisEarthQK) {
+    private void configRV(ArrayList<Earthquake> listEarthQK) {
         llm = new LinearLayoutManager(this);
         rvEvents.setLayoutManager(llm);
-        adapter = new EventsAdapter(lisEarthQK);
+        adapter = new EventsAdapter(listEarthQK);
         rvEvents.setAdapter(adapter);
         rvEvents.setHasFixedSize(true);
 
     }
 
     private void checkDataBase(ArrayList<Earthquake> lisEarthQK) {
-        lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAll();
+        lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAllEarthquake();
         ArrayList<CountryConcerned> listCcd = new ArrayList<>();
         if (lisEarthQK.isEmpty()){
             uploadList(lisEarthQK, listCcd);
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (CountryConcerned c: listCcd) {
             concernedDAO.insert(c);
         }
-        if (lisEarthQK.isEmpty() && listCcd.isEmpty()){
+        if (lisEarthQK.isEmpty() || listCcd.isEmpty()){
             Snackbar.make(findViewById(android.R.id.content),
                     R.string.error_upload, Snackbar.LENGTH_LONG).show();
             return;
@@ -113,61 +119,140 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDialogFilters() {
-        rvEvents.setVisibility(View.INVISIBLE);
         DialogFilters dialogFilters = new DialogFilters();
+        dialogFilters.setCancelable(false);
         dialogFilters.show(getSupportFragmentManager(), "DialogFilters");
+        configRV(list);
+        tvFilter.setText("----");
+        hideRecycleView(View.INVISIBLE);
+    }
+
+    private void hideRecycleView(int invisible) {
+        tvTitle.setVisibility(invisible);
+        rvEvents.setVisibility(invisible);
     }
 
     private void showResults() {
-        if (tvFilter.getText().toString().isEmpty())
-        tvTitle.setVisibility(View.VISIBLE);
-        rvEvents.setVisibility(View.VISIBLE);
-    }
+       if (result && tvFilter.getText().toString().equals("----")){
+             rvEvents.setVisibility(View.VISIBLE);
+             tvTitle.setVisibility(View.VISIBLE);
+            lisEarthQK = (ArrayList<Earthquake>) earthquakeDAO.getAllEarthquake();
+            configRV(lisEarthQK);
+       }else if (result || !tvFilter.getText().toString().equals("----")){
+           rvEvents.setVisibility(View.VISIBLE);
+           tvTitle.setVisibility(View.VISIBLE);
 
-
-    @Override
-    public void onFiltersMonth(String filterMonth) {
-
-        tvFilter.setText(filterMonth);
-    }
-
-    @Override
-    public void onFiltersYear(String filterYear) {
-        tvFilter.setText(filterYear);
-    }
-
-    @Override
-    public void onFiltersCountry(String filterCountry) {
-        tvFilter.setText(filterCountry);
-    }
-
-
-    @Override
-    public void onFilterMonthYear(@NonNull String filterMonth, String filterYear) {
-        result = filterMonth.concat(" - ").concat(filterYear);
-        tvFilter.setText(result);
-    }
-
-
-    @Override
-    public void onFilterMonthCountry(@NonNull String filterMonth, String filterCountry) {
-            result = filterMonth.concat(" - ").concat(filterCountry);
-            tvFilter.setText(result);
-    }
-
-
-    @Override
-    public void onFilterYearCountry(@NonNull String filterYear, String filterCountry) {
-
-        result = filterYear.concat(" - ").concat(filterCountry);
-        tvFilter.setText(result);
+       }else {
+           hideRecycleView(View.INVISIBLE);
+       }
 
     }
 
 
     @Override
-    public void onFilterMonthYearCountry(@NonNull String filterMonth, String filterYear, String filterCountry) {
-        result = filterMonth.concat(" - ").concat(filterYear).concat(" - ").concat(filterCountry);
-        tvFilter.setText(result);
+    public void onFiltersMonth(String month) {
+        tvFilter.setText(month);
+        ArrayList<Earthquake> listFilterMont = new ArrayList<>();
+        listFilterMont = (ArrayList<Earthquake>) earthquakeDAO.getEarthquakeByMonth("%"+month+"%");
+       if (!listFilterMont.isEmpty()){
+            configRV(listFilterMont);
+           hideRecycleView(View.INVISIBLE);
+       }else{
+           messageNoData();
+           hideRecycleView(View.INVISIBLE);
+           result = false;
+       }
+    }
+
+    private void messageNoData() {
+        configRV(list);
+        Toast.makeText(this, R.string.not_data_found, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFiltersYear(String year) {
+        tvFilter.setText(year);
+        ArrayList<Earthquake> listFilterYear = new ArrayList<>();
+        listFilterYear = (ArrayList<Earthquake>) earthquakeDAO.getEarthquakeByYear("%"+year+"%");
+        configRV(listFilterYear);
+        hideRecycleView(View.INVISIBLE);
+    }
+
+    @Override
+    public void onFiltersCountry(String country) {
+        tvFilter.setText(country);
+        ArrayList<Earthquake> listFilterCountry = new ArrayList<>();
+        listFilterCountry = (ArrayList<Earthquake>) earthquakeDAO.getEarthquakeByCountry("%"+country+"%");
+        configRV(listFilterCountry);
+        hideRecycleView(View.INVISIBLE);
+
+    }
+
+
+    @Override
+    public void onFilterMonthYear(String month, String year) {
+        tvFilter.setText(month + " - " + year);
+        ArrayList<Earthquake> listFilterMontYear = new ArrayList<>();
+        listFilterMontYear = (ArrayList<Earthquake>)
+                earthquakeDAO.getEarthquakeByMonthAndYear("%"+month+"%", "%"+year+"%" );
+        if (!listFilterMontYear.isEmpty()){
+            configRV(listFilterMontYear);
+            hideRecycleView(View.INVISIBLE);
+        }else {
+            hideRecycleView(View.INVISIBLE);
+            messageNoData();
+            result = false;
+        }
+    }
+
+
+    @Override
+    public void onFilterMonthCountry(String month, String country) {
+        tvFilter.setText(month +" - "+ country);
+        ArrayList<Earthquake> listFilterMontCountry = new ArrayList<>();
+        listFilterMontCountry = (ArrayList<Earthquake>)
+                earthquakeDAO.getEarthquakeByMonthAndCountry("%"+month+"%", "%"+country+"%" );
+        if (!listFilterMontCountry.isEmpty()){
+            configRV(listFilterMontCountry);
+            hideRecycleView(View.INVISIBLE);
+        }else {
+            messageNoData();
+            result = true;
+        }
+
+    }
+
+
+    @Override
+    public void onFilterYearCountry(String year, String country) {
+        tvFilter.setText(year +" - "+ country);
+        ArrayList<Earthquake> listFilterYearCountry = new ArrayList<>();
+        listFilterYearCountry = (ArrayList<Earthquake>)
+                earthquakeDAO.getEarthquakeByYearAndCountry("%"+year+"%", "%"+country+"%" );
+        if (!listFilterYearCountry.isEmpty()){
+            configRV(listFilterYearCountry);
+            hideRecycleView(View.INVISIBLE);
+        }else {
+            messageNoData();
+            result = false;
+        }
+
+    }
+
+
+    @Override
+    public void onFilterMonthYearCountry(String month, String year, String country) {
+        tvFilter.setText(month +" - "+ year +" - "+ country);
+        ArrayList<Earthquake> listFilterMontYearCountry = new ArrayList<>();
+        listFilterMontYearCountry = (ArrayList<Earthquake>)
+                earthquakeDAO.getEarthquakeByMonthYearCountry("%"+month+"%", "%"+year+"%", "%"+country+"%" );
+        if (!listFilterMontYearCountry.isEmpty()){
+            configRV(listFilterMontYearCountry);
+            hideRecycleView(View.INVISIBLE);
+        }else {
+            messageNoData();
+            result = false;
+        }
+
     }
 }

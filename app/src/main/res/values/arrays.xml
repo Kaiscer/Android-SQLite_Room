@@ -15,31 +15,4 @@
         <item>noviembre</item>
         <item>diciembre</item>
     </string-array>
-    <string-array name="FiltersYear">
-        <item></item>
-        <item>2019</item>
-        <item>2020</item>
-        <item>2021</item>
-        <item>2022</item>
-        <item>2023</item>
-        <item>2024</item>
-        <item>2025</item>
-        <item>2026</item>
-        <item>2027</item>
-        <item>2028</item>
-        <item>2029</item>
-        <item>2030</item>
-    </string-array>
-    <string-array name="FiltersCountry">
-        <item></item>
-        <item>Argentina</item>
-        <item>Brasil</item>
-        <item>Chile</item>
-        <item>Colombia</item>
-        <item>Ecuador</item>
-        <item>Paraguay</item>
-        <item>Perú</item>
-        <item>Uruguay</item>
-        <item>Venezuela</item>
-    </string-array>
 </resources>

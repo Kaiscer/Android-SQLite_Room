@@ -4,7 +4,7 @@
     <string name="btn_see">Consultar</string>
     <string name="insert_ok">Terremotos insertados</string>
     <string name="tv_title">Terremotos</string>
-    <string name="error_upload">Error en actualizacion de datos</string>
+    <string name="error_upload">Error en la actualización de datos</string>
     <string name="scale">en la escala de Richter</string>
     <string name="filters">Selecciona un filtro</string>
     <string name="btn_accept">Aceptar</string>
@@ -15,6 +15,7 @@
     <string name="year">Año</string>
     <string name="country">País</string>
     <string name="titleFilters">Filtros</string>
+    <string name="not_data_found">"No hay terremosto para los filtros selesccionados. "</string>
 
 
 </resources>

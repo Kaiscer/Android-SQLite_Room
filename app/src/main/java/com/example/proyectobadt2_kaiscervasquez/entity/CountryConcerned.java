@@ -1,6 +1,7 @@
 package com.example.proyectobadt2_kaiscervasquez.entity;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -12,9 +13,11 @@ import androidx.room.PrimaryKey;
 public class CountryConcerned {
 
     @NonNull
+    @ColumnInfo(name = "DateTime")
     private String DateTime;
 
     @NonNull
+    @ColumnInfo(name = "Country")
     private String Country;
 
     public CountryConcerned(String dateTime, String country) {
